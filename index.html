@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#101827" />
+    <title>MKS GSG | Maths PDF Library</title>
+    <style>
+      :root {
+        --bg: #0c1220;
+        --side: #101a2b;
+        --panel: #151f31;
+        --panel2: #1b2940;
+        --line: #2a3a53;
+        --text: #eef4ff;
+        --muted: #9cacc4;
+        --accent: #62d6ca;
+        --orange: #ffbd68;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          15px/1.5 Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button,
+      a {
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 270px minmax(0, 1fr);
+      }
+      aside {
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        overflow: auto;
+        background: var(--side);
+        border-right: 1px solid var(--line);
+        padding: 23px 16px;
+      }
+      .brand {
+        font-size: 21px;
+        font-weight: 900;
+        letter-spacing: 0.4px;
+      }
+      .brand b {
+        color: var(--accent);
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 3px;
+      }
+      .side-title {
+        margin: 29px 10px 9px;
+        color: #71839e;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+      }
+      .folder {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        border: 0;
+        background: transparent;
+        color: #c0ccdd;
+        padding: 12px;
+        border-radius: 11px;
+        text-align: left;
+      }
+      .folder.active,
+      .folder:hover {
+        background: #22344c;
+        color: white;
+      }
+      .folder .count {
+        margin-left: auto;
+        font-size: 12px;
+        color: #8fa7c4;
+        background: #17263a;
+        padding: 3px 8px;
+        border-radius: 99px;
+      }
+      .side-note {
+        border-top: 1px solid var(--line);
+        margin-top: 28px;
+        padding: 17px 10px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .main {
+        padding: 26px clamp(16px, 3vw, 42px) 60px;
+        min-width: 0;
+        max-width: 1600px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 25px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--accent);
+        font-weight: 800;
+      }
+      .tag {
+        border: 1px solid var(--line);
+        background: #142137;
+        color: #b8c8dc;
+        padding: 7px 10px;
+        border-radius: 9px;
+        font-size: 12px;
+      }
+      .hero {
+        padding: clamp(22px, 4vw, 38px);
+        border-radius: 22px;
+        border: 1px solid #2c5662;
+        background:
+          radial-gradient(ellipse at 90% 5%, #1c5554 0, transparent 42%),
+          linear-gradient(120deg, #182943, #121b2b 70%);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero:after {
+        content: "∑";
+        position: absolute;
+        right: 28px;
+        bottom: -60px;
+        font-size: 220px;
+        line-height: 1;
+        color: #ffffff08;
+        font-weight: 900;
+        pointer-events: none;
+      }
+      .hero .eyebrow {
+        position: relative;
+        z-index: 1;
+      }
+      .hero h1 {
+        font-size: clamp(28px, 4vw, 45px);
+        line-height: 1.1;
+        margin: 12px 0 10px;
+        position: relative;
+        z-index: 1;
+      }
+      .hero p {
+        max-width: 660px;
+        color: #c0cedf;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+      }
+      .stats {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 23px;
+        position: relative;
+        z-index: 1;
+      }
+      .stat {
+        background: #ffffff0b;
+        border: 1px solid #ffffff12;
+        padding: 10px 13px;
+        border-radius: 12px;
+        min-width: 125px;
+      }
+      .stat strong {
+        display: block;
+        font-size: 21px;
+      }
+      .stat span {
+        font-size: 12px;
+        color: #aebed1;
+      }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 25px 0 16px;
+      }
+      .search {
+        flex: 1;
+        min-width: 190px;
+        border: 1px solid #34455f;
+        background: #151f31;
+        color: white;
+        padding: 13px 15px;
+        border-radius: 12px;
+        outline: none;
+      }
+      .search:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px #62d6ca20;
+      }
+      .btn {
+        border: 1px solid var(--line);
+        background: var(--panel2);
+        color: white;
+        padding: 11px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+      }
+      .btn:hover {
+        border-color: #67849f;
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #092426;
+      }
+      .sectionhead {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 25px 0 12px;
+      }
+      .sectionhead h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .pdf-list {
+        display: grid;
+        gap: 10px;
+      }
+      .pdf-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 15px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        min-width: 0;
+        transition:
+          transform 0.15s,
+          border-color 0.15s;
+      }
+      .pdf-row:hover {
+        transform: translateY(-1px);
+        border-color: #54718b;
+      }
+      .file-icon {
+        width: 44px;
+        height: 50px;
+        flex: 0 0 44px;
+        border-radius: 9px;
+        background: #44242e;
+        display: grid;
+        place-items: center;
+        color: #ff9da9;
+        font-size: 12px;
+        font-weight: 900;
+        border: 1px solid #76404a;
+      }
+      .pdf-info {
+        min-width: 0;
+        flex: 1;
+      }
+      .pdf-info h3 {
+        font-size: 15px;
+        line-height: 1.35;
+        margin: 0 0 5px;
+        overflow-wrap: anywhere;
+      }
+      .pdf-info p {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0;
+      }
+      .actions {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .actions .btn {
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+      .empty {
+        padding: 35px;
+        text-align: center;
+        border: 1px dashed var(--line);
+        border-radius: 14px;
+        color: var(--muted);
+      }
+      .footer {
+        text-align: center;
+        margin-top: 38px;
+        font-size: 12px;
+        color: #71839b;
+      }
+      .hamb {
+        display: none;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: #020611dd;
+        z-index: 50;
+        padding: 20px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal.open {
+        display: flex;
+      }
+      .modalbox {
+        width: min(1150px, 100%);
+        height: min(92vh, 900px);
+        background: #101827;
+        border: 1px solid #35465e;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .modalhead {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 15px;
+        border-bottom: 1px solid var(--line);
+      }
+      .modalname {
+        font-weight: 750;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .close {
+        background: #26364d;
+        color: white;
+        border: 0;
+        border-radius: 9px;
+        padding: 9px 12px;
+      }
+      .frame {
+        border: 0;
+        background: white;
+        width: 100%;
+        height: 100%;
+        flex: 1;
+      }
+      .watermark {
+        position: fixed;
+        bottom: 10px;
+        right: 13px;
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: #9bb3cf45;
+        pointer-events: none;
+        z-index: 4;
+      }
+      @media (max-width: 780px) {
+        .shell {
+          display: block;
+        }
+        aside {
+          position: fixed;
+          z-index: 30;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 270px;
+          transform: translateX(-105%);
+          transition: transform 0.2s;
+          box-shadow: 10px 0 35px #0005;
+        }
+        aside.open {
+          transform: translateX(0);
+        }
+        .hamb {
+          display: inline-block;
+        }
+        .main {
+          padding: 17px 13px 40px;
+        }
+        .top {
+          align-items: flex-start;
+        }
+        .hero {
+          border-radius: 17px;
+        }
+        .pdf-row {
+          align-items: flex-start;
+        }
+        .actions {
+          flex-direction: column;
+        }
+        .actions .btn {
+          white-space: nowrap;
+        }
+        .tag {
+          display: none;
+        }
+      }
+      @media (max-width: 440px) {
+        .pdf-row {
+          gap: 9px;
+          padding: 11px;
+        }
+        .file-icon {
+          width: 36px;
+          height: 43px;
+          flex-basis: 36px;
+        }
+        .pdf-info h3 {
+          font-size: 13px;
+        }
+        .actions .btn {
+          padding: 7px;
+          font-size: 11px;
+        }
+        .stats {
+          gap: 8px;
+        }
+        .stat {
+          min-width: calc(50% - 5px);
+          flex: 1;
+        }
+        .hero h1 {
+          font-size: 28px;
+        }
+      }
+      @media print {
+        aside,
+        .top,
+        .toolbar,
+        .actions,
+        .footer,
+        .watermark {
+          display: none !important;
+        }
+        .shell {
+          display: block;
+        }
+        .main {
+          padding: 0;
+        }
+        .hero {
+          background: white;
+          color: black;
+          border: 0;
+        }
+        .pdf-row {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside id="sidebar">
+        <div class="brand">∑ <b>MKS GSG</b></div>
+        <div class="sub">SSC CGL · MATHS PDF LIBRARY</div>
+        <div class="side-title">Your collections</div>
+        <nav id="folders"></nav>
+        <div class="side-note">
+          Pure HTML · CSS · JavaScript<br />Keep each PDF folder beside
+          <code>index.html</code>.<br /><br /><b>Watermark:</b> mks_gsg
+        </div>
+      </aside>
+      <main class="main">
+        <div class="top">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="btn hamb" id="menuBtn">☰</button>
+            <div>
+              <div class="eyebrow">SSC CGL QUANTITATIVE APTITUDE</div>
+              <div class="muted">Your notes, organised your way</div>
+            </div>
+          </div>
+          <span class="tag">STATIC · VERCEL READY</span>
+        </div>
+        <section class="hero">
+          <div class="eyebrow">MATHS HOTSHOT COLLECTION</div>
+          <h1>Every PDF. One place.</h1>
+          <p>
+            Browse your Maths folders, search any topic, and open a PDF in the
+            built-in viewer or a new tab. Your original files remain unchanged.
+          </p>
+          <div class="stats">
+            <div class="stat">
+              <strong id="totalFiles">17</strong><span>PDF documents</span>
+            </div>
+            <div class="stat">
+              <strong id="totalFolders">1</strong><span>Collections</span>
+            </div>
+            <div class="stat">
+              <strong id="visibleFiles">17</strong><span>Currently shown</span>
+            </div>
+          </div>
+        </section>
+        <div class="sectionhead">
+          <div>
+            <h2 id="collectionTitle">HotShot</h2>
+            <div class="muted" id="collectionSub">Fast revision PDFs</div>
+          </div>
+          <span class="tag" id="countPill">17 files</span>
+        </div>
+        <div class="toolbar">
+          <input
+            class="search"
+            id="search"
+            type="search"
+            placeholder="⌕  Search PDFs by name or topic…"
+            autocomplete="off"
+          /><button class="btn" id="clearBtn">Clear</button>
+        </div>
+        <div class="pdf-list" id="pdfList"></div>
+        <div class="footer">Made for your study workflow · mks_gsg</div>
+      </main>
+    </div>
+    <div
+      class="modal"
+      id="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="PDF preview"
+    >
+      <div class="modalbox">
+        <div class="modalhead">
+          <div class="modalname" id="modalName">PDF Preview</div>
+          <a class="btn" id="openNew" target="_blank" rel="noopener"
+            >Open in new tab ↗</a
+          ><button class="close" id="closeModal">✕</button>
+        </div>
+        <iframe class="frame" id="pdfFrame" title="PDF preview"></iframe>
+      </div>
+    </div>
+    <div class="watermark">mks_gsg</div>
+    <script>
+      "use strict";
+      // Add future folders here. Keep folderName exactly the same as the actual folder beside index.html.
+      const collections = [
+        {
+          id: "hotshot",
+          name: "HotShot",
+          folder: "HotShot",
+          description: "Maths HotShot · Fast Revision",
+          files: [
+            {
+              name: "AVERAGE OF AP.pdf",
+              path: "HotShot/AVERAGE OF AP.pdf",
+              topic: "AVERAGE OF AP",
+            },
+            {
+              name: "CIRCLE - TANGENTS.pdf",
+              path: "HotShot/CIRCLE - TANGENTS.pdf",
+              topic: "CIRCLE · TANGENTS",
+            },
+            {
+              name: "COMMON CHORDS - ALL TYPES.pdf",
+              path: "HotShot/COMMON CHORDS - ALL TYPES.pdf",
+              topic: "COMMON CHORDS · ALL TYPES",
+            },
+            {
+              name: "COORDINATE GEOMETRY.pdf",
+              path: "HotShot/COORDINATE GEOMETRY.pdf",
+              topic: "COORDINATE GEOMETRY",
+            },
+            {
+              name: "MEAN MEDIAN MODE (1).pdf",
+              path: "HotShot/MEAN MEDIAN MODE (1).pdf",
+              topic: "MEAN MEDIAN MODE (Copy)",
+            },
+            {
+              name: "NUMBER SYSTEM - CLASSIFICATION.pdf",
+              path: "HotShot/NUMBER SYSTEM - CLASSIFICATION.pdf",
+              topic: "NUMBER SYSTEM · CLASSIFICATION",
+            },
+            {
+              name: "NUMBER SYSTEM - DECIMALS & FRACTIONS.pdf",
+              path: "HotShot/NUMBER SYSTEM - DECIMALS & FRACTIONS.pdf",
+              topic: "NUMBER SYSTEM · DECIMALS & FRACTIONS",
+            },
+            {
+              name: "NUMBER SYSTEM - RATIONAL & IRRATIONAL OPERATIONS.pdf",
+              path: "HotShot/NUMBER SYSTEM - RATIONAL & IRRATIONAL OPERATIONS.pdf",
+              topic: "NUMBER SYSTEM · RATIONAL & IRRATIONAL OPERATIONS",
+            },
+            {
+              name: "NUMBER SYSTEM - SQUARE ROOTS.pdf",
+              path: "HotShot/NUMBER SYSTEM - SQUARE ROOTS.pdf",
+              topic: "NUMBER SYSTEM · SQUARE ROOTS",
+            },
+            {
+              name: "PARALLEL CHORDS - ALL TYPES.pdf",
+              path: "HotShot/PARALLEL CHORDS - ALL TYPES.pdf",
+              topic: "PARALLEL CHORDS · ALL TYPES",
+            },
+            {
+              name: "SECTOR OF CIRCLE - ALL TYPES.pdf",
+              path: "HotShot/SECTOR OF CIRCLE - ALL TYPES.pdf",
+              topic: "SECTOR OF CIRCLE · ALL TYPES",
+            },
+            {
+              name: "SEGMENT OF CIRCLES - ALL TYPES.pdf",
+              path: "HotShot/SEGMENT OF CIRCLES - ALL TYPES.pdf",
+              topic: "SEGMENT OF CIRCLES · ALL TYPES",
+            },
+            {
+              name: "TRIGONOMETRY - MOST REPEATED QUESTIONS.pdf",
+              path: "HotShot/TRIGONOMETRY - MOST REPEATED QUESTIONS.pdf",
+              topic: "TRIGONOMETRY · MOST REPEATED QUESTIONS",
+            },
+            {
+              name: "TRIGONOMETRY - MOST REPETITIVE QUESTIONS.pdf",
+              path: "HotShot/TRIGONOMETRY - MOST REPETITIVE QUESTIONS.pdf",
+              topic: "TRIGONOMETRY · MOST REPETITIVE QUESTIONS",
+            },
+            {
+              name: "TRIGONOMETRY - QUADRANT SYSTEM.pdf",
+              path: "HotShot/TRIGONOMETRY - QUADRANT SYSTEM.pdf",
+              topic: "TRIGONOMETRY · QUADRANT SYSTEM",
+            },
+            {
+              name: "TRIGONOMETRY - SQUARING & ADDING (1).pdf",
+              path: "HotShot/TRIGONOMETRY - SQUARING & ADDING (1).pdf",
+              topic: "TRIGONOMETRY · SQUARING & ADDING (Copy)",
+            },
+            {
+              name: "TRIGONOMETRY - SQUARING & ADDING.pdf",
+              path: "HotShot/TRIGONOMETRY - SQUARING & ADDING.pdf",
+              topic: "TRIGONOMETRY · SQUARING & ADDING",
+            },
+          ],
+        },
+      ];
+      const $ = (s) => document.querySelector(s);
+      let activeId = collections[0].id;
+      function esc(s) {
+        return String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+      function pathFor(folder, file) {
+        return (
+          folder +
+          "/" +
+          file.split("/").map(encodeURIComponent).join("/").replace(/%2F/g, "/")
+        );
+      }
+      function allFiles() {
+        return collections.flatMap((c) =>
+          c.files.map((f) => ({
+            ...f,
+            folder: c.folder,
+            collection: c.name,
+            path: pathFor(c.folder, f.name),
+          })),
+        );
+      }
+      function renderFolders() {
+        $("#folders").innerHTML = collections
+          .map(
+            (c) =>
+              `<button class="folder ${c.id === activeId ? "active" : ""}" data-id="${esc(c.id)}"><span>📁</span><span>${esc(c.name)}</span><span class="count">${c.files.length}</span></button>`,
+          )
+          .join("");
+        document.querySelectorAll(".folder").forEach(
+          (b) =>
+            (b.onclick = () => {
+              activeId = b.dataset.id;
+              $("#search").value = "";
+              renderFolders();
+              renderList();
+              $("#sidebar").classList.remove("open");
+            }),
+        );
+      }
+      function renderList() {
+        const c = collections.find((x) => x.id === activeId) || collections[0],
+          q = $("#search").value.trim().toLowerCase();
+        $("#collectionTitle").textContent = c.name;
+        $("#collectionSub").textContent = c.description || "PDF collection";
+        const list = c.files
+          .map((f) => ({
+            ...f,
+            folder: c.folder,
+            path: pathFor(c.folder, f.name),
+          }))
+          .filter((f) =>
+            (f.name + " " + (f.topic || "") + " " + c.name)
+              .toLowerCase()
+              .includes(q),
+          );
+        $("#countPill").textContent =
+          `${list.length} of ${c.files.length} files`;
+        $("#visibleFiles").textContent = list.length;
+        $("#pdfList").innerHTML = list.length
+          ? list
+              .map(
+                (f, i) =>
+                  `<article class="pdf-row"><div class="file-icon">PDF</div><div class="pdf-info"><h3>${esc(f.name.replace(/\.pdf$/i, ""))}</h3><p>${esc(f.topic || c.name)} · PDF document</p></div><div class="actions"><button class="btn primary" data-preview="${esc(f.name)}">Preview</button><a class="btn" href="${f.path}" target="_blank" rel="noopener">Open ↗</a><a class="btn" href="${f.path}" download>Download ↓</a></div></article>`,
+              )
+              .join("")
+          : '<div class="empty">No PDFs match this search. Try another keyword.</div>';
+        document.querySelectorAll("[data-preview]").forEach(
+          (b) =>
+            (b.onclick = () =>
+              preview(
+                c.files.find((f) => f.name === b.dataset.preview),
+                c.folder,
+              )),
+        );
+      }
+      function preview(f, folder) {
+        if (!f) return;
+        const path = pathFor(folder, f.name);
+        $("#modalName").textContent = f.name;
+        $("#pdfFrame").src = path;
+        $("#openNew").href = path;
+        $("#modal").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function closePreview() {
+        $("#modal").classList.remove("open");
+        $("#pdfFrame").src = "";
+        document.body.style.overflow = "";
+      }
+      $("#search").addEventListener("input", renderList);
+      $("#clearBtn").onclick = () => {
+        $("#search").value = "";
+        renderList();
+        $("#search").focus();
+      };
+      $("#menuBtn").onclick = () => $("#sidebar").classList.toggle("open");
+      $("#closeModal").onclick = closePreview;
+      $("#modal").addEventListener("click", (e) => {
+        if (e.target === $("#modal")) closePreview();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closePreview();
+      });
+      const total = allFiles().length;
+      $("#totalFiles").textContent = total;
+      $("#totalFolders").textContent = collections.length;
+      renderFolders();
+      renderList();
+    </script>
+  </body>
+</html>
