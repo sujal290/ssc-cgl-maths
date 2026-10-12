@@ -483,6 +483,136 @@
       }
     </style>
   </head>
+  <!-- MKS_GSG Floating Back to Master Index Button -->
+
+<a
+  href="https://gsgsscmaterial.vercel.app/"
+  class="master-float-btn"
+  aria-label="Back to Master Index"
+  title="Back to Master Index"
+>
+  <span class="master-btn-arrow">←</span>
+  <span class="master-btn-text">Master Index</span>
+</a>
+
+<style>
+/* Floating Button */
+.master-float-btn {
+  position: fixed;
+  left: 22px;
+  bottom: 24px;
+  z-index: 999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 13px 19px;
+  border-radius: 50px;
+
+  background: rgba(22, 119, 255, 0.92);
+  color: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 5px 22px rgba(22, 119, 255, 0.30);
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+
+  opacity: 0.95;
+  transform: translateY(0);
+
+  transition:
+    opacity 0.35s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Arrow */
+.master-btn-arrow {
+  font-size: 21px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+/* Scroll Down: Dim Button */
+.master-float-btn.scrolled {
+  opacity: 0.42;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Hover: Bright Button */
+.master-float-btn:hover,
+.master-float-btn:focus-visible,
+.master-float-btn:active {
+  opacity: 1;
+  background: #1685ff;
+  box-shadow: 0 8px 30px rgba(22, 133, 255, 0.55);
+  transform: translateY(-3px);
+}
+
+.master-float-btn:hover .master-btn-arrow {
+  transform: translateX(-4px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .master-float-btn {
+    left: 12px;
+    bottom: 16px;
+    padding: 11px 15px;
+    font-size: 12px;
+  }
+
+  .master-btn-arrow {
+    font-size: 19px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .master-float-btn,
+  .master-btn-arrow {
+    transition: none;
+  }
+}
+</style>
+
+<script>
+(function () {
+  const button = document.querySelector(".master-float-btn");
+
+  if (!button) return;
+
+  let scrollTimeout;
+
+  function updateButton() {
+    button.classList.toggle(
+      "scrolled",
+      window.scrollY > 80
+    );
+  }
+
+  window.addEventListener("scroll", function () {
+    updateButton();
+
+    clearTimeout(scrollTimeout);
+
+    scrollTimeout = setTimeout(updateButton, 120);
+  }, { passive: true });
+
+  updateButton();
+})();
+</script>
+
+<!-- End Floating Button -->
   <body>
     <div class="shell">
       <aside id="sidebar">
